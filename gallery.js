@@ -12,9 +12,7 @@ galleryEl.insertAdjacentHTML('afterbegin', imgEl);
 
 galleryEl.addEventListener('click', onOpenModalImgClick);
 
-modalButton.addEventListener('click', onCloseModalClick);
-backdrop.addEventListener('click', onCloseModalClick);
-document.addEventListener('keydown', onCloseModalEsc);
+
 
 function createGallaryMarkup(images) {
   return images.map(image => {
@@ -44,6 +42,10 @@ function onOpenModalImgClick(event) {
     divModalEl.classList.add('is-open');
 
     changeUrlModalImg(event);
+
+    modalButton.addEventListener('click', onCloseModalClick);
+    backdrop.addEventListener('click', onCloseModalClick);
+    document.addEventListener('keydown', onCloseModalEsc);
 }
 
 function onCloseModalClick(event) {
@@ -51,11 +53,16 @@ function onCloseModalClick(event) {
     if (event.currentTarget === event.target) {
         divModalEl.classList.remove('is-open');
     };
+
+    modalButton.removeEventListener('click', onCloseModalClick);
+    backdrop.removeEventListener('click', onCloseModalClick);
 }
 
 function onCloseModalEsc(event) {
     deleteUrlModalimg();
     if (event.code === 'Escape') { divModalEl.classList.remove('is-open'); }
+
+    document.removeEventListener('keydown', onCloseModalEsc);
 }
 
 function changeUrlModalImg(event) {
@@ -66,3 +73,4 @@ function changeUrlModalImg(event) {
 function deleteUrlModalimg() {
     openModalImg.removeAttribute('src');
 }
+
