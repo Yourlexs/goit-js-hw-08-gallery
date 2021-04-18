@@ -6,13 +6,11 @@ const backdrop = document.querySelector('.lightbox__overlay')
 const openModalImg = document.querySelector('.lightbox__image');
 const modalButton = document.querySelector('button[data-action="close-lightbox"]');
 
-const imgEl = createGallaryMarkup(imagesForGallary);
+const imagesEl = createGallaryMarkup(imagesForGallary);
 
-galleryEl.insertAdjacentHTML('afterbegin', imgEl);
+galleryEl.insertAdjacentHTML('afterbegin', imagesEl);
 
 galleryEl.addEventListener('click', onOpenModalImgClick);
-
-
 
 function createGallaryMarkup(images) {
   return images.map(image => {
@@ -32,6 +30,7 @@ function createGallaryMarkup(images) {
   }).join('')
 }
 
+
 function onOpenModalImgClick(event) {
     event.preventDefault();
 
@@ -41,36 +40,27 @@ function onOpenModalImgClick(event) {
 
     divModalEl.classList.add('is-open');
 
-    changeUrlModalImg(event);
+    const newSrc = event.target.getAttribute('data-source');
+    openModalImg.src = newSrc;
 
     modalButton.addEventListener('click', onCloseModalClick);
     backdrop.addEventListener('click', onCloseModalClick);
     document.addEventListener('keydown', onCloseModalEsc);
 }
 
-function onCloseModalClick(event) {
-    deleteUrlModalimg();
-    if (event.currentTarget === event.target) {
-        divModalEl.classList.remove('is-open');
-    };
+function onCloseModalClick() {
+    openModalImg.removeAttribute('src');
+  
+    divModalEl.classList.remove('is-open');
 
     modalButton.removeEventListener('click', onCloseModalClick);
     backdrop.removeEventListener('click', onCloseModalClick);
 }
 
 function onCloseModalEsc(event) {
-    deleteUrlModalimg();
-    if (event.code === 'Escape') { divModalEl.classList.remove('is-open'); }
-
+  if (event.code === 'Escape') {
+    onCloseModalClick(event);
     document.removeEventListener('keydown', onCloseModalEsc);
-}
-
-function changeUrlModalImg(event) {
-    const newSrc = event.target.getAttribute('data-source');
-    openModalImg.src = newSrc;
-}
-
-function deleteUrlModalimg() {
-    openModalImg.removeAttribute('src');
+  };
 }
 
